@@ -66,25 +66,25 @@ def find_top_similar_images(query_image, feature_list, image_names, folder_path,
 
 # Streamlit app
 def main():
-    st.title("Image Similarity Finder")
+    st.title("Visual Pattern Detector")
     
     # Step 1: Read the pre-uploaded CSV file
-    st.subheader("Step 1: Reading Pre-uploaded CSV File")
+    st.subheader("Step 1: Reading CSV File")
     csv_path = "Data ID - Sheet1.csv"  # Replace with your actual file path
     if not os.path.exists(csv_path):
         st.error("CSV file not found!")
         return
     
     df = pd.read_csv(csv_path)
-    st.write("CSV file loaded successfully!")
+    st.write("File Loaded successfully!")
     
     # Step 2: Download images from the links and save in a folder
-    st.subheader("Step 2: Downloading Images from Links")
+    st.subheader("Step 2: Downloading Images from Link")
     output_dir = "downloaded_images"
     os.makedirs(output_dir, exist_ok=True)
     
     if len(os.listdir(output_dir)) == 0:  # Only download if the folder is empty
-        st.write("Downloading images...")
+        st.write("Downloading All Images...")
         for _, row in df.iterrows():
             image_url = row['image_link']
             response = requests.get(image_url, stream=True)
@@ -94,15 +94,15 @@ def main():
                     file.write(response.content)
         st.success(f"Images downloaded to the folder: {output_dir}")
     else:
-        st.info("Images already downloaded.")
+        st.info("Images Downloaded.")
 
     # Step 3: Extract features for downloaded images
     st.subheader("Step 3: Extracting Features")
     st.write("Extracting features from images...")
     feature_list, image_names = extract_features_from_folder(output_dir, max_images=10)
-    st.success("Features extracted successfully!")
+    st.success("Features Extracted Successfully!")
 
-    # Step 4: Upload query image to find similar images
+    # Step 4: Upload Image to Find Similar Images
     st.subheader("Step 4: Upload Query Image")
     uploaded_query_image = st.file_uploader("Upload an image to find similar images", type=["png", "jpg", "jpeg"])
     
